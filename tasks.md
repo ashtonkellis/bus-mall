@@ -1,10 +1,11 @@
 # TODAY'S LAB MVP
-- make an array of items 
-
-
-
-
-
+- array of items
+- constructor function to make items with properties:
+  - htmlID
+  - name
+  - url
+  - voteNum
+  - displayNum
 
 
 1. display results of votes after a total of 25 selections have been made
