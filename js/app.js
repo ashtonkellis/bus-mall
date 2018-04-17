@@ -88,7 +88,7 @@ function renderItems (quantity) {
 }
 
 function handleImageClick (e) {
-  for (var i; i < items.length; i++) {
+  for (var i; i < 3; i++) {
     console.log(items[i]);
   }
   console.log(e.target.id);
@@ -99,6 +99,14 @@ function addAllImageEventListeners () {
   for (var i = 0; i < itemsList.childElementCount; i++) {
     var itemImage = itemsList.childNodes[i];
     itemImage.addEventListener('click', handleImageClick);
+  }
+}
+
+function incrementVote(path) {
+  for (var item of items) {
+    if (item.path = path) {
+      item.voteNum++;
+    }
   }
 }
 
