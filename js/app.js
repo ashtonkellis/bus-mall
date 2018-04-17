@@ -102,7 +102,7 @@ function handleImageClick (e) {
   // increment the vote of the selected item
   incrementVote(e.target.id);
 
-  if (prevChoices.length <= 24) {
+  if (prevChoices.length <= 2) { // change to 24
     renderItems(3);
     addAllImageEventListeners();
   } else {
@@ -121,15 +121,39 @@ function addAllImageEventListeners () {
   }
 }
 
+// accepts a text string and returns a table header element with that text string
+function addTH(elementText) {
+  var thEL = document.createElement('th');
+  thEL.textContent = elementText;
+  return thEL;
+}
+
+// accepts a text string and returns a table data element with that text string
+function addTD(elementText) {
+  var tdEL = document.createElement('td');
+  tdEL.textContent = elementText;
+  return tdEL;
+}
+
 // display the results of the voting ***** CONVERT TO A TABLE ASAP *****
 function tallyVotes () {
-  var ulEL = document.getElementById('results');
-  for (var item of items) {
-    var liEL = document.createElement('li');
-    liEL.textContent = item.htmlId + ' - ';
-    liEL.textContnet += item.voteNum.toString() + '/' + item.shownNum.toString() + ' - ';
-    liEL.textContent += Math.round((item.voteNum / item.shownNum * 100)).toString() + '%';
-    ulEL.appendChild(liEL);
+  var tableEL = document.getElementById('results');
+  var trEL = document.createElement('tr');
+  trEL.appendChild(addTH('#'));
+  trEL.appendChild(addTH('id'));
+  trEL.appendChild(addTH('votes'));
+  trEL.appendChild(addTH('views'));
+  trEL.appendChild(addTH('% votes'));
+  tableEL.appendChild(trEL);
+  for (var i; i < items.length; i++) {
+    var item = items[i];
+    trEL = document.createElement('tr');
+    trEL.appendChild(addTD(i + 1)); // #
+    trEL.appendChild(addTD(item.htmlId)); // id
+    trEL.appendChild(addTD(item.voteNum)); // votes
+    trEL.appendChild(addTD(item.shownNum)); // views
+    trEL.appendChild(addTD(item.voteNum / item.shownNum * 100)); // % votes
+    tableEL.appendChild(trEL);
   }
 }
 
