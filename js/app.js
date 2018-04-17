@@ -2,7 +2,7 @@
 
 function Item(name, imageName, htmlId) {
   this.name = name;
-  this.imageName = 'img/' + imageName;
+  this.path = 'img/' + imageName;
   this.htmlId = htmlId;
   this.voteNum = 0;
   this.shownNum = 0;
@@ -33,7 +33,21 @@ var items = [
 
 var votes = [];
 
+var itemsList = document.getElementById('items');
+
 function randIntBetween (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+function randItem () {
+  var randInt = randIntBetween(0, items.length);
+  return items[randInt];
+}
+
+function renderItems () {
+  var newItem = randItem();
+  var imgEL = document.createElement('img');
+  imgEL.src = newItem.path;
+  imgEL.id = newItem.htmlId;
+  itemsList.appendChild(imgEL);
+}
