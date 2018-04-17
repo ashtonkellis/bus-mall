@@ -1,11 +1,11 @@
 # TODAY'S LAB MVP
-
-1. display results of votes after a total of 25 selections have been made
+1. finish function to test whether an option has been previously presented
+1. refactor function that clears out all previously rendered image
+1. figure out why the for-loop to render the table data rows is not working. it wont even enter the loop. grrr!
 2. display total number of clicks that an item receives
 3. display percentage of votes (times selected / number of times displayed)
 4. track number of times each item is displayed
 5. Upon receiving a click, three new non-duplicating random images need to be automatically displayed. In other words, the three images that are displayed should contain no duplicates, nor should they duplicate with any images that we displayed immediately before
-6. After 25 selections have been made, turn off the event listeners on the images (to prevent additional voting) and also display a list of the products with votes received with each list item looking like "3 votes for the Banana Slicer"
 
 4. custom font
 5. custom color pallet
