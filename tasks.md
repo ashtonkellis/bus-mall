@@ -1,9 +1,4 @@
 # TODAY'S LAB MVP
-- render single item
-- render all three items
-- create function to generate all combinations and store as choices
-- 
-
 
 1. display results of votes after a total of 25 selections have been made
 2. display total number of clicks that an item receives

@@ -53,7 +53,7 @@ function getRandomIndexes(quantity, min, max) {
 }
 
 //  FINISH FUNCTION TO TEST WHETHER AN OPTINO HAS BEEN PREVIOUSLY PRESENTED
-function testChoiceArray(indexArr) { 
+function testChoiceArray(indexArr) {
   return true;
 }
 
@@ -87,23 +87,49 @@ function renderItems (quantity) {
   }
 }
 
+// increment vote of the appropriate item based on the html Id
 function incrementVote(htmlId) {
   for (var item of items) {
-    if (item.htmlid = htmlId) {
+    if (item.htmlId === htmlId) {
       item.voteNum++;
     }
   }
 }
 
+// image click handler
 function handleImageClick (e) {
   console.log(e.target.id);
+  // increment the vote of the selected item
   incrementVote(e.target.id);
+
+  if (prevChoices.length <= 24) {
+    renderItems(3);
+    addAllImageEventListeners();
+  } else {
+    // clear previously rendered items  ************ NEED TO REFACTOR THIS. SAME CODE USED ABOVE
+    while (itemsList.hasChildNodes()) {
+      itemsList.removeChild(itemsList.lastChild);
+    }
+    tallyVotes();
+  }
 }
 
 function addAllImageEventListeners () {
   for (var i = 0; i < itemsList.childElementCount; i++) {
     var itemImage = itemsList.childNodes[i];
     itemImage.addEventListener('click', handleImageClick);
+  }
+}
+
+// display the results of the voting ***** CONVERT TO A TABLE ASAP *****
+function tallyVotes () {
+  var ulEL = document.getElementById('results');
+  for (var item of items) {
+    var liEL = document.createElement('li');
+    liEL.textContent = item.htmlId + ' - ';
+    liEL.textContnet += item.voteNum.toString() + '/' + item.shownNum.toString() + ' - ';
+    liEL.textContent += Math.round((item.voteNum / item.shownNum * 100)).toString() + '%';
+    ulEL.appendChild(liEL);
   }
 }
 
