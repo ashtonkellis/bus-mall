@@ -31,7 +31,7 @@ var items = [
   new Item('12-Step Wine Glass', 'wine-glass.jpg', 'wine-glass'),
 ];
 
-var votes = [];
+var prevChoices = [];
 
 var itemsList = document.getElementById('items');
 
@@ -52,17 +52,35 @@ function getRandomIndexes(quantity, min, max) {
   return uniqueIndexes;
 }
 
-function renderItems (indexes) {
+function renderItems (quantity) {
+  // create new array of random indexes
+  var indexArr = getRandomIndexes(quantity, 0, items.length - 1);
+  // ensure that it has not been previously shown
+  //            *** ADD CODE HERE ***
+
   // clear previously rendered items
   while (itemsList.hasChildNodes()) {
     itemsList.removeChild(itemsList.lastChild);
   }
 
   // render items
-  for (var i of indexes) {
+  for (var i of indexArr) {
     var imgEL = document.createElement('img');
     imgEL.src = items[i].path;
     imgEL.id = items[i].htmlId;
     itemsList.appendChild(imgEL);
   }
 }
+
+function imageClickHandler (e) {
+
+}
+
+function imageClickHandler (e) {
+  for (var i = 0; i < itemsList.childElementCount; i++) {
+    console.log(itemsList.childNodes[i]);
+  }
+}
+
+renderItems(3);
+imageClickHandler();
