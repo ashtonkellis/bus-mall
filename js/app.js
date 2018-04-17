@@ -47,9 +47,7 @@ function getRandomIndexes(quantity, min, max) {
   var uniqueIndexes = [];
   while (uniqueIndexes.length < quantity) {
     var randInt = randIntBetween(min, max);
-    if (uniqueIndexes.includes(randInt)) {
-      getRandomIndexes();
-    } else {
+    if (!uniqueIndexes.includes(randInt)) {
       uniqueIndexes.push(randInt);
     }
   }
