@@ -30,3 +30,10 @@ var items = [
   new Item('Self-Watering Can', 'water-can.jpg', 'water-can'),
   new Item('12-Step Wine Glass', 'wine-glass.jpg', 'wine-glass'),
 ];
+
+var votes = [];
+
+function randIntBetween (min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
