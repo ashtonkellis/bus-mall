@@ -1,10 +1,4 @@
 # TODAY'S LAB MVP
-1. finish function to test whether an option has been previously presented
-1. refactor function that clears out all previously rendered image
-1. figure out why the for-loop to render the table data rows is not working. it wont even enter the loop. grrr!
-2. display total number of clicks that an item receives
-3. display percentage of votes (times selected / number of times displayed)
-4. track number of times each item is displayed
 5. Upon receiving a click, three new non-duplicating random images need to be automatically displayed. In other words, the three images that are displayed should contain no duplicates, nor should they duplicate with any images that we displayed immediately before
 
 4. custom font

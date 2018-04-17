@@ -70,8 +70,26 @@ aside h2 {
   margin-bottom: 30px;
 }
 
-aside li {
+table {
+margin: auto;
+}
+
+th {
+  background-color: grey;
+  color: white;
+}
+
+tr:nth-child(odd) {
+  background-color: lightgrey;
+}
+
+th,
+td {
+  border: 1px solid black;
   text-align: center;
+  font-size: 8px;
+  line-height: 2;
+  width: 15%;
 }
 
 /* ITEMS */
