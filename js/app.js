@@ -53,10 +53,16 @@ function getRandomIndexes(quantity, min, max) {
 }
 
 function renderItems (indexes) {
-  for (var i in indexes) {
+  // clear previously rendered items
+  while (itemsList.hasChildNodes()) {
+    itemsList.removeChild(itemsList.lastChild);
+  }
+
+  // render items
+  for (var i of indexes) {
     var imgEL = document.createElement('img');
-    imgEL.src = Item[i].path;
-    imgEL.id = Item[i].htmlId;
+    imgEL.src = items[i].path;
+    imgEL.id = items[i].htmlId;
     itemsList.appendChild(imgEL);
   }
 }
