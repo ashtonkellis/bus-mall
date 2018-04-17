@@ -1,0 +1,113 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 960px;
+  margin: auto;
+}
+
+header {
+  display: inline-block;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+header * {
+  height: 50px;
+}
+
+h1 {
+  width: 500px;
+  padding: 0 20px;
+  line-height: 50px;
+  font-size: 30px;
+}
+
+/* NAV ELEMENTS */
+nav ul {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+nav ul li {
+  width: 100px;
+  text-align: center;
+  line-height: 50px;
+  border: 1px solid black;
+  margin-right: -1px;
+  border-radius: 10% 10% 0 0;
+}
+
+/* CONTENT (ASIDE AND SECTION) LAYOUT */
+.content {
+  display: flex;
+  justify-content: space-between;
+  height: 500px;
+}
+
+.vote h2 {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.content aside {
+  width: 25%;
+  height: 100%;
+  padding: 15px;
+  border: 1px solid black;
+}
+
+.vote {
+  width: 75%;
+}
+
+/* ASIDE */
+aside h2 {
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+aside li {
+  text-align: center;
+}
+
+/* ITEMS */
+.items {
+  height: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content img {
+  height: 100%;
+  width: 33.4%;
+  border: 1px solid black;
+  padding: 50px;
+}
+
+.vote h2 {
+  border: 1px solid black;
+  padding: 10px;
+  height: 10%;
+}
+
+.text {
+  height: 40%;
+  padding: 10px;
+  border: 1px solid black;
+  text-indent: 2em;
+  line-height: 1.25;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  height: 50px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
