@@ -32,9 +32,11 @@ var items = [
 ];
 
 var prevChoices = [];
+var requiredVotes = 2500;
 
 var itemsList = document.getElementById('items');
 
+// returns a random integer between the min and max (both inclusive)
 function randIntBetween (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
@@ -52,16 +54,28 @@ function getRandomIndexes(quantity, min, max) {
   return uniqueIndexes;
 }
 
-//  FINISH FUNCTION TO TEST WHETHER AN OPTINO HAS BEEN PREVIOUSLY PRESENTED
-function testChoiceArray(indexArr) {
+//  tests whether an index array has already been tested. tests for permutations and combinations
+function indexArrIsUnique(indexArr) {
+  for (var choice of prevChoices) {
+    var duplicates = 0;
+    for (var indexValue of indexArr) {
+      if (choice.includes(indexValue)) {
+        duplicates++;
+      }
+      if (duplicates === indexArr.length) {
+        return false;
+      }
+    }
+  }
   return true;
 }
 
+// renders a set of items on the page. the # of items is a parameter
 function renderItems (quantity) {
   // create new array of random indexes
   var indexArr = getRandomIndexes(quantity, 0, items.length - 1);
   // ensure that it has not been previously shown
-  if (!testChoiceArray(indexArr)) {
+  if (!indexArrIsUnique(indexArr)) {
     renderItems();
   }
 
@@ -102,7 +116,7 @@ function handleImageClick (e) {
   // increment the vote of the selected item
   incrementVote(e.target.id);
 
-  if (prevChoices.length <= 24) { // change to 24
+  if (prevChoices.length < requiredVotes) {
     renderItems(3);
     addAllImageEventListeners();
   } else {
