@@ -52,11 +52,26 @@ function getRandomIndexes(quantity, min, max) {
   return uniqueIndexes;
 }
 
+//  FINISH FUNCTION TO TEST WHETHER AN OPTINO HAS BEEN PREVIOUSLY PRESENTED
+function testChoiceArray(indexArr) { 
+  return true;
+}
+
 function renderItems (quantity) {
   // create new array of random indexes
   var indexArr = getRandomIndexes(quantity, 0, items.length - 1);
   // ensure that it has not been previously shown
-  //            *** ADD CODE HERE ***
+  if (!testChoiceArray(indexArr)) {
+    renderItems();
+  }
+
+  // add index array to previous choices
+  prevChoices.push(indexArr);
+
+  // update shown number for each item
+  for (var i of indexArr) {
+    items[i].shownNum++;
+  }
 
   // clear previously rendered items
   while (itemsList.hasChildNodes()) {
@@ -64,23 +79,28 @@ function renderItems (quantity) {
   }
 
   // render items
-  for (var i of indexArr) {
+  for (var j of indexArr) {
     var imgEL = document.createElement('img');
-    imgEL.src = items[i].path;
-    imgEL.id = items[i].htmlId;
+    imgEL.src = items[j].path;
+    imgEL.id = items[j].htmlId;
     itemsList.appendChild(imgEL);
   }
 }
 
-function imageClickHandler (e) {
-
+function handleImageClick (e) {
+  for (var i; i < items.length; i++) {
+    console.log(items[i]);
+  }
+  console.log(e.target.id);
+  console.log(e.target);
 }
 
-function imageClickHandler (e) {
+function addAllImageEventListeners () {
   for (var i = 0; i < itemsList.childElementCount; i++) {
-    console.log(itemsList.childNodes[i]);
+    var itemImage = itemsList.childNodes[i];
+    itemImage.addEventListener('click', handleImageClick);
   }
 }
 
 renderItems(3);
-imageClickHandler();
+addAllImageEventListeners();
