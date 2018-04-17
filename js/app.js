@@ -148,17 +148,15 @@ function tallyVotes () {
   tableEL.appendChild(trEL);
   console.log('before loop');
   // render results data rows ***** WILL NOT RENDER, MUST REVISIT TOMORROW, WILL NOT ENTER THE FOLLOWING FOR LOOP
-  for (var n; n < 3; n++) {
-    console.log('after loop');
-
-    // var item = items[i];
-    // trEL = document.createElement('tr');
-    // trEL.appendChild(addTD(i + 1)); // #
-    // trEL.appendChild(addTD(item.htmlId)); // id
-    // trEL.appendChild(addTD(item.voteNum)); // votes
-    // trEL.appendChild(addTD(item.shownNum)); // views
-    // trEL.appendChild(addTD(item.voteNum / item.shownNum * 100)); // % votes
-    // tableEL.appendChild(trEL);
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    trEL = document.createElement('tr');
+    trEL.appendChild(addTD(i + 1)); // #
+    trEL.appendChild(addTD(item.htmlId)); // id
+    trEL.appendChild(addTD(item.voteNum)); // votes
+    trEL.appendChild(addTD(item.shownNum)); // views
+    trEL.appendChild(addTD(Math.floor(100 * item.voteNum / item.shownNum))); // % votes
+    tableEL.appendChild(trEL);
   }
 }
 
