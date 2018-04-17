@@ -87,26 +87,23 @@ function renderItems (quantity) {
   }
 }
 
-function handleImageClick (e) {
-  for (var i; i < 3; i++) {
-    console.log(items[i]);
+function incrementVote(htmlId) {
+  for (var item of items) {
+    if (item.htmlid = htmlId) {
+      item.voteNum++;
+    }
   }
+}
+
+function handleImageClick (e) {
   console.log(e.target.id);
-  console.log(e.target);
+  incrementVote(e.target.id);
 }
 
 function addAllImageEventListeners () {
   for (var i = 0; i < itemsList.childElementCount; i++) {
     var itemImage = itemsList.childNodes[i];
     itemImage.addEventListener('click', handleImageClick);
-  }
-}
-
-function incrementVote(path) {
-  for (var item of items) {
-    if (item.path = path) {
-      item.voteNum++;
-    }
   }
 }
 
