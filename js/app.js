@@ -39,15 +39,24 @@ function randIntBetween (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function randItem () {
-  var randInt = randIntBetween(0, items.length);
-  return items[randInt];
+function getRandomIndexes(quantity, min, max) {
+  var uniqueIndexes = [];
+  while (uniqueIndexes.length < quantity) {
+    var randInt = randIntBetween(min, max);
+    if (uniqueIndexes.includes(randInt)) {
+      getRandomIndexes();
+    } else {
+      uniqueIndexes.push(randInt);
+    }
+  }
+  return uniqueIndexes;
 }
 
-function renderItems () {
-  var newItem = randItem();
-  var imgEL = document.createElement('img');
-  imgEL.src = newItem.path;
-  imgEL.id = newItem.htmlId;
-  itemsList.appendChild(imgEL);
+function renderItems (indexes) {
+  for (var i in indexes) {
+    var imgEL = document.createElement('img');
+    imgEL.src = Item[i].path;
+    imgEL.id = Item[i].htmlId;
+    itemsList.appendChild(imgEL);
+  }
 }
