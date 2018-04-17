@@ -54,14 +54,14 @@ nav ul li {
 }
 
 .content aside {
-  width: 25%;
+  width: 30%;
   height: 100%;
   padding: 15px;
   border: 1px solid black;
 }
 
 .vote {
-  width: 75%;
+  width: 70%;
 }
 
 /* ASIDE */
@@ -119,6 +119,16 @@ td {
   border: 1px solid black;
   text-indent: 2em;
   line-height: 1.25;
+}
+
+#vote-chart {
+  border: 1px solid red;
+  display: block;
+  height: 100px;
+}
+
+#vote-chart {
+  width: 100%;
 }
 
 /* FOOTER */
