@@ -95,12 +95,11 @@ function clearItems () {
 
 // renders a set of items on the page. the # of items is a parameter (3 is recommended)
 function renderItems (quantity) {
-  // create new array of random indexes
-  var indexArr = getRandomIndexes(quantity, 0, items.length - 1);
-  // ensure that it has not been previously shown
-  if (!indexArrIsUnique(indexArr)) {
-    renderItems();
-  }
+  // create new array of random indexes, and ensure it is unique
+  var indexArr;
+  do {
+    indexArr = getRandomIndexes(quantity, 0, items.length - 1);
+  } while (!indexArrIsUnique(indexArr));
 
   // add index array to previous choices
   prevChoices.push(indexArr);
