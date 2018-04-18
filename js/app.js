@@ -204,7 +204,8 @@ function renderVotesTable () {
   //render results table header
   var tableEL = document.getElementById('results-table');
   var trEL = document.createElement('tr');
-  trEL.appendChild(addTH('#'));
+  trEL.appendChild(addTH('Image'));
+  trEL.appendChild(addTH('Item #'));
   trEL.appendChild(addTH('Item Name'));
   trEL.appendChild(addTH('Votes'));
   trEL.appendChild(addTH('Views'));
@@ -215,6 +216,9 @@ function renderVotesTable () {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     trEL = document.createElement('tr');
+    var imgEL = document.createElement('img');
+    imgEL.src = item.path;
+    trEL.appendChild(imgEL); // image
     trEL.appendChild(addTD(i + 1)); // #
     trEL.appendChild(addTD(item.name)); // id
     trEL.appendChild(addTD(item.voteNum)); // votes

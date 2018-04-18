@@ -96,9 +96,16 @@ th,
 td {
   border: 1px solid black;
   text-align: center;
-  font-size: 12px;
-  line-height: 2;
-  width: 15%;
+  font-size: 14px;
+  line-height: 50px;
+  height: 50px;
+  width: 150px;
+}
+
+
+table img {
+  height: 50px;
+  width: 50px;
 }
 
 /* FOOTER */
