@@ -1,39 +1,33 @@
 'use strict';
 
 // number of images displayed at a time. recommended < 10 or time to find a unique set of images gets ridiculous...
-Item.imagesDisplayed = 3;
-Item.requiredVotes = 25;
+Item.maxImagesDisplayed = 3;
+Item.requiredVotes = 5;
 Item.votesThisSession = 0;
 Item.prevChoices = JSON.parse(localStorage.getItem('prevChoices')) || [];
 Item.itemDisplayDiv = document.getElementById('items');
+Item.colorChoices = [
+  'rgb(150, 0, 0, ',
+  'rgb(0, 150, 0, ',
+  'rgb(0, 0, 150, '];
 Item.data = {};
 
-function saveToLocalStorage() {
-  localStorage.setItem('prevChoices', JSON.stringify(Item.prevChoices));
-  localStorage.setItem('items', JSON.stringify(items));
-}
-
 // calculte data required for chart.
-function calculateVoteData () {
+function getVoteData () {
   Item.data.itemNames = [];
   Item.data.itemVotes = [];
-  Item.data.backgroundColors = [];
-  Item.data.borderColors = [];
-  Item.data.backgroundColorCoices = [
-    'rgb(150, 0, 0 , 0.2)',
-    'rgb(0, 150, 0, 0.2)',
-    'rgb(0, 0, 150, 0.2)'];
-  Item.data.borderColorChoices = [
-    'rgb(150, 0, 0, 1)',
-    'rgb(0, 150, 0, 1)',
-    'rgb(0, 0, 150 , 1)'];
+  Item.data.backgroundColor = [];
+  Item.data.borderColor = [];
+  Item.data.backgroundColorCoices = [];
+  Item.data.borderColorChoices = [];
 
   var i = 0;
   for (var item of items) {
     Item.data.itemNames.push(item.name);
     Item.data.itemVotes.push(item.voteNum);
-    Item.data.backgroundColors.push(Item.data.backgroundColorCoices[i % Item.data.backgroundColorCoices.length]);
-    Item.data.borderColors.push(Item.data.borderColorChoices[i % Item.data.borderColorChoices.length]);
+    var color = Item.colorChoices[i % Item.colorChoices.length];
+    Item.data.backgroundColor.push(color + '0.2)');
+    Item.data.borderColor.push(color + '1.0)');
     i++;
   }
 }
@@ -151,6 +145,9 @@ function renderItems (quantity) {
     imgEL.src = items[j].path;
     imgEL.id = items[j].htmlId;
     Item.itemDisplayDiv.appendChild(imgEL);
+
+    //add all event listeners to newly rendered items
+    addAllImageEventListeners();
   }
 }
 
@@ -167,17 +164,17 @@ function incrementVote(htmlId) {
 function handleImageClick (e) {
   // increment the vote of the selected item
   incrementVote(e.target.id);
+  Item.votesThisSession++;
 
   // check for end of voting
   if (Item.votesThisSession < Item.requiredVotes) {
     // render a new set of items and create new event listeners for them
-    renderItems(Item.imagesDisplayed);
+    renderItems(Item.maxImagesDisplayed);
     addAllImageEventListeners();
-    Item.votesThisSession++;
   } else {
-    // clear previously rendered items and render vote results table
+    // clear previously rendered items, render vote results table, render vote results chart
     clearItems();
-    calculateVoteData();
+    getVoteData();
     renderVoteChart();
     renderVotesTable();
     toggleDisplays();
@@ -246,8 +243,8 @@ function renderVoteChart () {
       datasets: [{
         label: '# of Votes',
         data: Item.data.itemVotes,
-        backgroundColor: Item.data.backgroundColors,
-        borderColor: Item.data.borderColors,
+        backgroundColor: Item.data.backgroundColor,
+        borderColor: Item.data.borderColor,
         borderWidth: 1
       }]
     },
@@ -294,5 +291,10 @@ function toggleDisplays() {
   }
 }
 
-renderItems(Item.imagesDisplayed);
-addAllImageEventListeners();
+function saveToLocalStorage() {
+  localStorage.setItem('prevChoices', JSON.stringify(Item.prevChoices));
+  localStorage.setItem('items', JSON.stringify(items));
+}
+
+renderItems(Item.maxImagesDisplayed);
+
