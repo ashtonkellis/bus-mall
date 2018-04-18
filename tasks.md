@@ -1,7 +1,4 @@
 # HOUSEKEEPING
-- change all global variables into object properties so they consume less memory
-- make changes based on michelle's code review
-- change the function that returns the table data to return an object called 'data'
 
 # TODAY'S LAB MVP
 - use local storage to store voting data

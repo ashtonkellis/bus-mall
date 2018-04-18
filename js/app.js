@@ -166,15 +166,15 @@ function handleImageClick (e) {
   // check for end of voting
   if (Item.prevChoices.length < Item.requiredVotes) {
     // render a new set of items and create new event listeners for them
-    renderItems(Item.imagesDisplayed
-    );
+    renderItems(Item.imagesDisplayed);
     addAllImageEventListeners();
   } else {
     // clear previously rendered items and render vote results table
     clearItems();
-    renderVotesTable();
     calculateVoteData();
     renderVoteChart();
+    renderVotesTable();
+    toggleDisplays();
   }
 }
 
@@ -263,6 +263,24 @@ function renderVoteChart () {
       }
     }
   });
+}
+
+function toggleDisplays() {
+  var subHeader = document.getElementById('sub-header');
+  var voteSection = document.getElementById('vote-section');
+  var chartSection = document.getElementById('results-chart');
+  var tableSection = document.getElementById('results-table');
+  if (voteSection.style.display !== 'none') {
+    subHeader.textContent = 'Voting Results';
+    voteSection.style.display = 'none';
+    chartSection.style.display = '';
+    tableSection.style.display = '';
+  } else {
+    subHeader.textContent = 'Click on item to cast your vote!';
+    voteSection.style.display = '';
+    chartSection.style.display = '';
+    tableSection.style.display = 'none';
+  }
 }
 
 renderItems(Item.imagesDisplayed);
