@@ -3,7 +3,6 @@
 # TODAY'S LAB MVP
 - use local storage to store voting data
 - use the short-circuit function that allie demonstrated in class
-- add functionalit to show/hide sections using .removeAttribute('hidden');
 
 # STRETCH GOALS
 - change y-axis to have tick marks at 1 (not a fraction)

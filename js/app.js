@@ -2,11 +2,16 @@
 
 // number of images displayed at a time. recommended < 10 or time to find a unique set of images gets ridiculous...
 Item.imagesDisplayed = 3;
-Item.requiredVotes = 5;
-Item.prevChoices = [];
+Item.requiredVotes = 25;
+Item.votesThisSession = 0;
+Item.prevChoices = JSON.parse(localStorage.getItem('prevChoices')) || [];
 Item.itemDisplayDiv = document.getElementById('items');
 Item.data = {};
 
+function saveToLocalStorage() {
+  localStorage.setItem('prevChoices', JSON.stringify(Item.prevChoices));
+  localStorage.setItem('items', JSON.stringify(items));
+}
 
 // calculte data required for chart.
 function calculateVoteData () {
@@ -33,7 +38,7 @@ function calculateVoteData () {
   }
 }
 
-var items = [
+var items = JSON.parse(localStorage.getItem('items')) || [
   new Item('R2D2 Luggage', 'bag.jpg', 'bag'),
   new Item('Banana Slicer', 'banana.jpg', 'banana'),
   new Item('Bathroom iPod Stand', 'bathroom.jpg', 'bathroom'),
@@ -164,10 +169,11 @@ function handleImageClick (e) {
   incrementVote(e.target.id);
 
   // check for end of voting
-  if (Item.prevChoices.length < Item.requiredVotes) {
+  if (Item.votesThisSession < Item.requiredVotes) {
     // render a new set of items and create new event listeners for them
     renderItems(Item.imagesDisplayed);
     addAllImageEventListeners();
+    Item.votesThisSession++;
   } else {
     // clear previously rendered items and render vote results table
     clearItems();
@@ -175,6 +181,7 @@ function handleImageClick (e) {
     renderVoteChart();
     renderVotesTable();
     toggleDisplays();
+    saveToLocalStorage();
   }
 }
 
