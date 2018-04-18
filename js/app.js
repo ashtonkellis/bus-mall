@@ -1,6 +1,8 @@
 'use strict';
 
-var requiredVotes = 25; // CHANGE BACK TO 25 AFTER TESTING
+// number of images displayed at a time. recommended < 10 or time to find a unique set of images gets ridiculous...
+var imagesDisplayed = 3;
+var requiredVotes = 25;
 var prevChoices = [];
 
 var itemsList = document.getElementById('items');
@@ -13,13 +15,13 @@ var itemVotes = [];
 var backgroundColors = [];
 // chart.js input data - bar border colors
 var borderColors = [];
-
+// chart background color options
 var backgroundColorCoices = [
   'rgb(150, 0, 0 , 0.2)',
   'rgb(0, 150, 0, 0.2)',
   'rgb(0, 0, 150, 0.2)'
 ];
-
+// chart border color choices
 var borderColorChoices = [
   'rgb(150, 0, 0, 1)',
   'rgb(0, 150, 0, 1)',
@@ -172,7 +174,7 @@ function handleImageClick (e) {
   // check for end of voting
   if (prevChoices.length < requiredVotes) {
     // render a new set of items and create new event listeners for them
-    renderItems(3);
+    renderItems(imagesDisplayed);
     addAllImageEventListeners();
   } else {
     // clear previously rendered items and render vote results table
@@ -207,22 +209,21 @@ function addTD(elementText) {
 // render the results table
 function renderVotesTable () {
   //render results table header
-  var tableEL = document.getElementById('results');
+  var tableEL = document.getElementById('results-table');
   var trEL = document.createElement('tr');
   trEL.appendChild(addTH('#'));
-  trEL.appendChild(addTH('ID'));
+  trEL.appendChild(addTH('Item Name'));
   trEL.appendChild(addTH('Votes'));
   trEL.appendChild(addTH('Views'));
   trEL.appendChild(addTH('% Votes'));
   tableEL.appendChild(trEL);
-  console.log('before loop');
 
   // render results data rows
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     trEL = document.createElement('tr');
     trEL.appendChild(addTD(i + 1)); // #
-    trEL.appendChild(addTD(item.htmlId)); // id
+    trEL.appendChild(addTD(item.name)); // id
     trEL.appendChild(addTD(item.voteNum)); // votes
     trEL.appendChild(addTD(item.shownNum)); // views
     trEL.appendChild(addTD(Math.floor(100 * item.voteNum / item.shownNum))); // % votes
@@ -232,10 +233,8 @@ function renderVotesTable () {
 
 // render chart
 function renderVoteChart () {
-  // display canvas on the page
-
   // privide data to chart.js
-  var ctx = document.getElementById('vote-chart').getContext('2d');
+  var ctx = document.getElementById('results-chart').getContext('2d');
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -273,6 +272,6 @@ function renderVoteChart () {
   });
 }
 
-renderItems(3);
+renderItems(imagesDisplayed);
 addAllImageEventListeners();
 
