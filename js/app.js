@@ -235,7 +235,7 @@ function renderVotesTable () {
 function renderVoteChart () {
   // privide data to chart.js
   var ctx = document.getElementById('results-chart').getContext('2d');
-  var myChart = new Chart(ctx, {
+  var myChart = new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: {
       labels: itemNames,
