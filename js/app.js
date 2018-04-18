@@ -1,33 +1,43 @@
 'use strict';
 
-var requiredVotes = 5; // CHANGE BACK TO 25 AFTER TESTING
+var requiredVotes = 25; // CHANGE BACK TO 25 AFTER TESTING
 var prevChoices = [];
 
 var itemsList = document.getElementById('items');
 
 // chart.js input data - bar labels
-var itemNames = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
+var itemNames = [];
 // chart.js input data - bar data
-var itemVotes = [12, 19, 3, 5, 2, 3];
+var itemVotes = [];
 // chart.js input data - bar background colors
-var backgroundColors = [
-  'rgba(255, 99, 132, 0.2)',
-  'rgba(54, 162, 235, 0.2)',
-  'rgba(255, 206, 86, 0.2)',
-  'rgba(75, 192, 192, 0.2)',
-  'rgba(153, 102, 255, 0.2)',
-  'rgba(255, 159, 64, 0.2)'
-];
+var backgroundColors = [];
 // chart.js input data - bar border colors
-var borderColors = [
-  'rgba(255,99,132,1)',
-  'rgba(54, 162, 235, 1)',
-  'rgba(255, 206, 86, 1)',
-  'rgba(75, 192, 192, 1)',
-  'rgba(153, 102, 255, 1)',
-  'rgba(255, 159, 64, 1)'
+var borderColors = [];
+
+var backgroundColorCoices = [
+  'rgb(150, 0, 0 , 0.2)',
+  'rgb(0, 150, 0, 0.2)',
+  'rgb(0, 0, 150, 0.2)'
 ];
 
+var borderColorChoices = [
+  'rgb(150, 0, 0, 1)',
+  'rgb(0, 150, 0, 1)',
+  'rgb(0, 0, 150 , 1)'
+];
+
+
+// calculte data required for chart.
+function calculateVoteData () {
+  var i = 0;
+  for (var item of items) {
+    itemNames.push(item.name);
+    itemVotes.push(item.voteNum);
+    backgroundColors.push(backgroundColorCoices[i % backgroundColorCoices.length]);
+    borderColors.push(borderColorChoices[i % borderColorChoices.length]);
+    i++;
+  }
+}
 
 var items = [
   new Item('R2D2 Luggage', 'bag.jpg', 'bag'),
@@ -156,7 +166,6 @@ function incrementVote(htmlId) {
 
 // image click handler
 function handleImageClick (e) {
-  console.log(e.target.id);
   // increment the vote of the selected item
   incrementVote(e.target.id);
 
@@ -166,9 +175,10 @@ function handleImageClick (e) {
     renderItems(3);
     addAllImageEventListeners();
   } else {
-    // clear previously rendered items and tally votes
+    // clear previously rendered items and render vote results table
     clearItems();
-    tallyVotes();
+    renderVotesTable();
+    calculateVoteData();
     renderVoteChart();
   }
 }
@@ -195,7 +205,7 @@ function addTD(elementText) {
 }
 
 // render the results table
-function tallyVotes () {
+function renderVotesTable () {
   //render results table header
   var tableEL = document.getElementById('results');
   var trEL = document.createElement('tr');
@@ -240,9 +250,22 @@ function renderVoteChart () {
     },
     options: {
       scales: {
+        xAxes: [{
+          stacked: false,
+          beginAtZero: true,
+          scaleLabel: {
+            labelString: 'Month'
+          },
+          ticks: {
+            stepSize: 1,
+            min: 0,
+            autoSkip: false
+          }
+        }],
         yAxes: [{
           ticks: {
-            beginAtZero:true
+            beginAtZero:true,
+            stepSize: 1
           }
         }]
       }
