@@ -1,9 +1,45 @@
 'use strict';
 
+// number of images displayed at a time. recommended < 10 or time to find a unique set of images gets ridiculous...
+var imagesDisplayed = 3;
 var requiredVotes = 25;
 var prevChoices = [];
 
 var itemsList = document.getElementById('items');
+
+// chart.js input data - bar labels
+var itemNames = [];
+// chart.js input data - bar data
+var itemVotes = [];
+// chart.js input data - bar background colors
+var backgroundColors = [];
+// chart.js input data - bar border colors
+var borderColors = [];
+// chart background color options
+var backgroundColorCoices = [
+  'rgb(150, 0, 0 , 0.2)',
+  'rgb(0, 150, 0, 0.2)',
+  'rgb(0, 0, 150, 0.2)'
+];
+// chart border color choices
+var borderColorChoices = [
+  'rgb(150, 0, 0, 1)',
+  'rgb(0, 150, 0, 1)',
+  'rgb(0, 0, 150 , 1)'
+];
+
+
+// calculte data required for chart.
+function calculateVoteData () {
+  var i = 0;
+  for (var item of items) {
+    itemNames.push(item.name);
+    itemVotes.push(item.voteNum);
+    backgroundColors.push(backgroundColorCoices[i % backgroundColorCoices.length]);
+    borderColors.push(borderColorChoices[i % borderColorChoices.length]);
+    i++;
+  }
+}
 
 var items = [
   new Item('R2D2 Luggage', 'bag.jpg', 'bag'),
@@ -47,9 +83,7 @@ function getRandomIndexes(quantity, min, max) {
   var uniqueIndexes = [];
   while (uniqueIndexes.length < quantity) {
     var randInt = randIntBetween(min, max);
-    if (uniqueIndexes.includes(randInt)) {
-      getRandomIndexes();
-    } else {
+    if (!uniqueIndexes.includes(randInt)) {
       uniqueIndexes.push(randInt);
     }
   }
@@ -97,12 +131,11 @@ function clearItems () {
 
 // renders a set of items on the page. the # of items is a parameter (3 is recommended)
 function renderItems (quantity) {
-  // create new array of random indexes
-  var indexArr = getRandomIndexes(quantity, 0, items.length - 1);
-  // ensure that it has not been previously shown
-  if (!indexArrIsUnique(indexArr)) {
-    renderItems();
-  }
+  // create new array of random indexes, and ensure it is unique
+  var indexArr;
+  do {
+    indexArr = getRandomIndexes(quantity, 0, items.length - 1);
+  } while (!indexArrIsUnique(indexArr));
 
   // add index array to previous choices
   prevChoices.push(indexArr);
@@ -135,19 +168,20 @@ function incrementVote(htmlId) {
 
 // image click handler
 function handleImageClick (e) {
-  console.log(e.target.id);
   // increment the vote of the selected item
   incrementVote(e.target.id);
 
   // check for end of voting
   if (prevChoices.length < requiredVotes) {
     // render a new set of items and create new event listeners for them
-    renderItems(3);
+    renderItems(imagesDisplayed);
     addAllImageEventListeners();
   } else {
-    // clear previously rendered items and tally votes
+    // clear previously rendered items and render vote results table
     clearItems();
-    tallyVotes();
+    renderVotesTable();
+    calculateVoteData();
+    renderVoteChart();
   }
 }
 
@@ -173,24 +207,23 @@ function addTD(elementText) {
 }
 
 // render the results table
-function tallyVotes () {
+function renderVotesTable () {
   //render results table header
-  var tableEL = document.getElementById('results');
+  var tableEL = document.getElementById('results-table');
   var trEL = document.createElement('tr');
   trEL.appendChild(addTH('#'));
-  trEL.appendChild(addTH('ID'));
+  trEL.appendChild(addTH('Item Name'));
   trEL.appendChild(addTH('Votes'));
   trEL.appendChild(addTH('Views'));
   trEL.appendChild(addTH('% Votes'));
   tableEL.appendChild(trEL);
-  console.log('before loop');
 
   // render results data rows
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     trEL = document.createElement('tr');
     trEL.appendChild(addTD(i + 1)); // #
-    trEL.appendChild(addTD(item.htmlId)); // id
+    trEL.appendChild(addTD(item.name)); // id
     trEL.appendChild(addTD(item.voteNum)); // votes
     trEL.appendChild(addTD(item.shownNum)); // views
     trEL.appendChild(addTD(Math.floor(100 * item.voteNum / item.shownNum))); // % votes
@@ -198,5 +231,47 @@ function tallyVotes () {
   }
 }
 
-renderItems(3);
+// render chart
+function renderVoteChart () {
+  // privide data to chart.js
+  var ctx = document.getElementById('results-chart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: itemNames,
+      datasets: [{
+        label: '# of Votes',
+        data: itemVotes,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          stacked: false,
+          beginAtZero: true,
+          scaleLabel: {
+            labelString: 'Month'
+          },
+          ticks: {
+            stepSize: 1,
+            min: 0,
+            autoSkip: false
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            stepSize: 1
+          }
+        }]
+      }
+    }
+  });
+}
+
+renderItems(imagesDisplayed);
 addAllImageEventListeners();
+

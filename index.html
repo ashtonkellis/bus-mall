@@ -19,24 +19,26 @@
       </ul>
     </nav>
   </header>
-  <div class="content">
-    <aside>
-      <h2>Results</h2>
-      <table id="results"></table>
-    </aside>
-    <div class="vote">
-      <section id = "items" class="items">
-      </section>
-      <h2>Click on item to cast your vote!</h2>
-      <section class="text">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-      </section> <!-- end of text div -->  
-    </div><!-- end of vote div -->
-  </div><!-- end of content div -->
+  <section class="vote" id="vote-section">
+    <h2>Click on item to cast your vote!</h2>
+    <div class="items" id="items">
+      <img src="http://via.placeholder.com/100x100" alt="">
+      <img src="http://via.placeholder.com/100x100" alt="">
+      <img src="http://via.placeholder.com/100x100" alt="">
+    </div>
+    <div class="text">
+      <p>Welcome to our BusMall product market research center! 100% of these products are extremely useful, and purchasing them will vastly improve the quality of your life.</p>
+    </div>
+  </section>
+  <section class="results-table">
+    <h2>Results</h2>
+    <table id="results-table"></table>
+  </section>
+  <canvas id="results-chart"></canvas>
   <footer>
     <p>Footer Stuff</p>
   </footer>
-  <script src=js/app.js></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
