@@ -5,31 +5,30 @@ Item.imagesDisplayed = 3;
 Item.requiredVotes = 5;
 Item.prevChoices = [];
 Item.itemDisplayDiv = document.getElementById('items');
-
-var data = {};
+Item.data = {};
 
 
 // calculte data required for chart.
 function calculateVoteData () {
-  data.itemNames = [];
-  data.itemVotes = [];
-  data.backgroundColors = [];
-  data.borderColors = [];
-  data.backgroundColorCoices = [
+  Item.data.itemNames = [];
+  Item.data.itemVotes = [];
+  Item.data.backgroundColors = [];
+  Item.data.borderColors = [];
+  Item.data.backgroundColorCoices = [
     'rgb(150, 0, 0 , 0.2)',
     'rgb(0, 150, 0, 0.2)',
     'rgb(0, 0, 150, 0.2)'];
-  data.borderColorChoices = [
+  Item.data.borderColorChoices = [
     'rgb(150, 0, 0, 1)',
     'rgb(0, 150, 0, 1)',
     'rgb(0, 0, 150 , 1)'];
 
   var i = 0;
   for (var item of items) {
-    data.itemNames.push(item.name);
-    data.itemVotes.push(item.voteNum);
-    data.backgroundColors.push(data.backgroundColorCoices[i % data.backgroundColorCoices.length]);
-    data.borderColors.push(data.borderColorChoices[i % data.borderColorChoices.length]);
+    Item.data.itemNames.push(item.name);
+    Item.data.itemVotes.push(item.voteNum);
+    Item.data.backgroundColors.push(Item.data.backgroundColorCoices[i % Item.data.backgroundColorCoices.length]);
+    Item.data.borderColors.push(Item.data.borderColorChoices[i % Item.data.borderColorChoices.length]);
     i++;
   }
 }
@@ -232,12 +231,12 @@ function renderVoteChart () {
   var myChart = new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: {
-      labels: data.itemNames,
+      labels: Item.data.itemNames,
       datasets: [{
         label: '# of Votes',
-        data: data.itemVotes,
-        backgroundColor: data.backgroundColors,
-        borderColor: data.borderColors,
+        data: Item.data.itemVotes,
+        backgroundColor: Item.data.backgroundColors,
+        borderColor: Item.data.borderColors,
         borderWidth: 1
       }]
     },
