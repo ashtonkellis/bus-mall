@@ -7,31 +7,39 @@ Item.votesThisSession = 0;
 Item.prevChoices = JSON.parse(localStorage.getItem('prevChoices')) || [];
 Item.itemDisplayDiv = document.getElementById('items');
 Item.colorChoices = [
-  'rgb(150, 0, 0, ',
-  'rgb(0, 150, 0, ',
-  'rgb(0, 0, 150, '];
+  'rgb(150, 0, 0)',
+  'rgb(0, 150, 0)',
+  'rgb(0, 0, 150)'];
 Item.data = {};
 
 // calculte data required for chart.
 function getVoteData () {
-  Item.data.itemNames = [];
-  Item.data.itemVotes = [];
-  Item.data.backgroundColor = [];
-  Item.data.borderColor = [];
-  Item.data.backgroundColorCoices = [];
-  Item.data.borderColorChoices = [];
+  var data = {
+    itemNames: [],
+    itemVotes: [],
+    backgroundColor: [],
+    borderColor: [],
+    backgroundColorCoices: [],
+    borderColorChoices: []
+  };
 
   var i = 0;
   for (var item of items) {
-    Item.data.itemNames.push(item.name);
-    Item.data.itemVotes.push(item.voteNum);
+    data.itemNames.push(item.name);
+    data.itemVotes.push(item.voteNum);
+    // push correct colors for border and background
     var color = Item.colorChoices[i % Item.colorChoices.length];
-    Item.data.backgroundColor.push(color + '0.2)');
-    Item.data.borderColor.push(color + '1.0)');
+    color = color.substring(0, color.length - 1);
+    data.backgroundColor.push(color + ', 0.2)');
+    data.borderColor.push(color + ', 1.0)');
     i++;
+
+    Item.data = data;
+    // return data; // CANNOT GET THIS TO WORK! GRR!
   }
 }
 
+// load items from local storage if they exist, otherwise create new set of items.
 var items = JSON.parse(localStorage.getItem('items')) || [
   new Item('R2D2 Luggage', 'bag.jpg', 'bag'),
   new Item('Banana Slicer', 'banana.jpg', 'banana'),
@@ -220,9 +228,13 @@ function renderVotesTable () {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     trEL = document.createElement('tr');
+    //create TD that has the image as its child image element
     var imgEL = document.createElement('img');
     imgEL.src = item.path;
-    trEL.appendChild(imgEL); // image
+    var imgTableDataEL = document.createElement('td');
+    imgTableDataEL.appendChild(imgEL);
+    // append TDs to TR
+    trEL.appendChild(imgTableDataEL); // image
     trEL.appendChild(addTD(i + 1)); // #
     trEL.appendChild(addTD(item.name)); // id
     trEL.appendChild(addTD(item.voteNum)); // votes
