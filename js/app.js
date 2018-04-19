@@ -7,9 +7,11 @@ Item.votesThisSession = 0;
 Item.prevChoices = JSON.parse(localStorage.getItem('prevChoices')) || [];
 Item.itemDisplayDiv = document.getElementById('items');
 Item.colorChoices = [
-  'rgb(150, 0, 0)',
-  'rgb(0, 150, 0)',
-  'rgb(0, 0, 150)'];
+  'rgb(250,213,166)',
+  'rgb(251,183,158)',
+  'rgb(134,103,104)',
+  'rgb(226,95,112)',
+  'rgb(76,56,74)'];
 Item.data = {};
 
 // calculte data required for chart.
@@ -294,11 +296,13 @@ function toggleDisplays() {
     subHeader.textContent = 'Voting Results';
     voteSection.style.display = 'none';
     chartSection.style.display = '';
+    chartSection.removeAttribute('hidden');
     tableSection.style.display = '';
   } else {
     subHeader.textContent = 'Click on item to cast your vote!';
     voteSection.style.display = '';
     chartSection.style.display = '';
+    chartSection.addAttribute('hidden');
     tableSection.style.display = 'none';
   }
 }
