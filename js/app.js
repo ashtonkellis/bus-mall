@@ -1,47 +1,48 @@
 'use strict';
 
 // number of images displayed at a time. recommended < 10 or time to find a unique set of images gets ridiculous...
-var imagesDisplayed = 3;
-var requiredVotes = 25;
-var prevChoices = [];
-
-var itemsList = document.getElementById('items');
-
-// chart.js input data - bar labels
-var itemNames = [];
-// chart.js input data - bar data
-var itemVotes = [];
-// chart.js input data - bar background colors
-var backgroundColors = [];
-// chart.js input data - bar border colors
-var borderColors = [];
-// chart background color options
-var backgroundColorCoices = [
-  'rgb(150, 0, 0 , 0.2)',
-  'rgb(0, 150, 0, 0.2)',
-  'rgb(0, 0, 150, 0.2)'
-];
-// chart border color choices
-var borderColorChoices = [
-  'rgb(150, 0, 0, 1)',
-  'rgb(0, 150, 0, 1)',
-  'rgb(0, 0, 150 , 1)'
-];
-
+Item.maxImagesDisplayed = 3;
+Item.requiredVotes = 25;
+Item.votesThisSession = 0;
+Item.prevChoices = JSON.parse(localStorage.getItem('prevChoices')) || [];
+Item.itemDisplayDiv = document.getElementById('items');
+Item.colorChoices = [
+  'rgb(250,213,166)',
+  'rgb(251,183,158)',
+  'rgb(134,103,104)',
+  'rgb(226,95,112)',
+  'rgb(76,56,74)'];
+Item.data = {};
 
 // calculte data required for chart.
-function calculateVoteData () {
+function getVoteData () {
+  var data = {
+    itemNames: [],
+    itemVotes: [],
+    backgroundColor: [],
+    borderColor: [],
+    backgroundColorCoices: [],
+    borderColorChoices: []
+  };
+
   var i = 0;
   for (var item of items) {
-    itemNames.push(item.name);
-    itemVotes.push(item.voteNum);
-    backgroundColors.push(backgroundColorCoices[i % backgroundColorCoices.length]);
-    borderColors.push(borderColorChoices[i % borderColorChoices.length]);
+    data.itemNames.push(item.name);
+    data.itemVotes.push(item.voteNum);
+    // push correct colors for border and background
+    var color = Item.colorChoices[i % Item.colorChoices.length];
+    color = color.substring(0, color.length - 1);
+    data.backgroundColor.push(color + ', 0.2)');
+    data.borderColor.push(color + ', 1.0)');
     i++;
+
+    Item.data = data;
+    // return data; // CANNOT GET THIS TO WORK! GRR!
   }
 }
 
-var items = [
+// load items from local storage if they exist, otherwise create new set of items.
+var items = JSON.parse(localStorage.getItem('items')) || [
   new Item('R2D2 Luggage', 'bag.jpg', 'bag'),
   new Item('Banana Slicer', 'banana.jpg', 'banana'),
   new Item('Bathroom iPod Stand', 'bathroom.jpg', 'bathroom'),
@@ -93,12 +94,12 @@ function getRandomIndexes(quantity, min, max) {
 //  tests whether a new index array can be used
 function indexArrIsUnique(indexArr) {
   // return true if there are no previous guesses
-  if (prevChoices.length === 0) {
+  if (Item.prevChoices.length === 0) {
     return true;
   }
 
   // check that index is unique to all previous choices (permutations and combinations)
-  for (var choice of prevChoices) {
+  for (var choice of Item.prevChoices) {
     var duplicates = 0;
     for (var indexValue of indexArr) {
       if (choice.includes(indexValue)) {
@@ -111,8 +112,8 @@ function indexArrIsUnique(indexArr) {
   }
 
   //check that new selection does not have any duplicate images from the last selection
-  var lastChoiceIndex = prevChoices.length - 1;
-  var lastChoice = prevChoices[lastChoiceIndex];
+  var lastChoiceIndex = Item.prevChoices.length - 1;
+  var lastChoice = Item.prevChoices[lastChoiceIndex];
   duplicates = 0;
   for (indexValue of indexArr) {
     if (lastChoice.includes(indexValue)) {
@@ -124,8 +125,8 @@ function indexArrIsUnique(indexArr) {
 
 // clears all of the items from the screen before rendering
 function clearItems () {
-  while (itemsList.hasChildNodes()) {
-    itemsList.removeChild(itemsList.lastChild);
+  while (Item.itemDisplayDiv.hasChildNodes()) {
+    Item.itemDisplayDiv.removeChild(Item.itemDisplayDiv.lastChild);
   }
 }
 
@@ -138,7 +139,7 @@ function renderItems (quantity) {
   } while (!indexArrIsUnique(indexArr));
 
   // add index array to previous choices
-  prevChoices.push(indexArr);
+  Item.prevChoices.push(indexArr);
 
   // update shown number property for each item
   for (var i of indexArr) {
@@ -153,7 +154,10 @@ function renderItems (quantity) {
     var imgEL = document.createElement('img');
     imgEL.src = items[j].path;
     imgEL.id = items[j].htmlId;
-    itemsList.appendChild(imgEL);
+    Item.itemDisplayDiv.appendChild(imgEL);
+
+    //add all event listeners to newly rendered items
+    addAllImageEventListeners();
   }
 }
 
@@ -170,24 +174,27 @@ function incrementVote(htmlId) {
 function handleImageClick (e) {
   // increment the vote of the selected item
   incrementVote(e.target.id);
+  Item.votesThisSession++;
 
   // check for end of voting
-  if (prevChoices.length < requiredVotes) {
+  if (Item.votesThisSession < Item.requiredVotes) {
     // render a new set of items and create new event listeners for them
-    renderItems(imagesDisplayed);
+    renderItems(Item.maxImagesDisplayed);
     addAllImageEventListeners();
   } else {
-    // clear previously rendered items and render vote results table
+    // clear previously rendered items, render vote results table, render vote results chart
     clearItems();
-    renderVotesTable();
-    calculateVoteData();
+    getVoteData();
     renderVoteChart();
+    renderVotesTable();
+    toggleDisplays();
+    saveToLocalStorage();
   }
 }
 
 function addAllImageEventListeners () {
-  for (var i = 0; i < itemsList.childElementCount; i++) {
-    var itemImage = itemsList.childNodes[i];
+  for (var i = 0; i < Item.itemDisplayDiv.childElementCount; i++) {
+    var itemImage = Item.itemDisplayDiv.childNodes[i];
     itemImage.addEventListener('click', handleImageClick);
   }
 }
@@ -211,7 +218,8 @@ function renderVotesTable () {
   //render results table header
   var tableEL = document.getElementById('results-table');
   var trEL = document.createElement('tr');
-  trEL.appendChild(addTH('#'));
+  trEL.appendChild(addTH('Image'));
+  trEL.appendChild(addTH('Item #'));
   trEL.appendChild(addTH('Item Name'));
   trEL.appendChild(addTH('Votes'));
   trEL.appendChild(addTH('Views'));
@@ -222,6 +230,13 @@ function renderVotesTable () {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     trEL = document.createElement('tr');
+    //create TD that has the image as its child image element
+    var imgEL = document.createElement('img');
+    imgEL.src = item.path;
+    var imgTableDataEL = document.createElement('td');
+    imgTableDataEL.appendChild(imgEL);
+    // append TDs to TR
+    trEL.appendChild(imgTableDataEL); // image
     trEL.appendChild(addTD(i + 1)); // #
     trEL.appendChild(addTD(item.name)); // id
     trEL.appendChild(addTD(item.voteNum)); // votes
@@ -235,15 +250,15 @@ function renderVotesTable () {
 function renderVoteChart () {
   // privide data to chart.js
   var ctx = document.getElementById('results-chart').getContext('2d');
-  var myChart = new Chart(ctx, {
+  var myChart = new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: {
-      labels: itemNames,
+      labels: Item.data.itemNames,
       datasets: [{
         label: '# of Votes',
-        data: itemVotes,
-        backgroundColor: backgroundColors,
-        borderColor: borderColors,
+        data: Item.data.itemVotes,
+        backgroundColor: Item.data.backgroundColor,
+        borderColor: Item.data.borderColor,
         borderWidth: 1
       }]
     },
@@ -272,6 +287,30 @@ function renderVoteChart () {
   });
 }
 
-renderItems(imagesDisplayed);
-addAllImageEventListeners();
+function toggleDisplays() {
+  var subHeader = document.getElementById('sub-header');
+  var voteSection = document.getElementById('vote-section');
+  var chartSection = document.getElementById('results-chart');
+  var tableSection = document.getElementById('results-table');
+  if (voteSection.style.display !== 'none') {
+    subHeader.textContent = 'Voting Results';
+    voteSection.style.display = 'none';
+    chartSection.style.display = '';
+    chartSection.removeAttribute('hidden');
+    tableSection.style.display = '';
+  } else {
+    subHeader.textContent = 'Click on item to cast your vote!';
+    voteSection.style.display = '';
+    chartSection.style.display = '';
+    chartSection.addAttribute('hidden');
+    tableSection.style.display = 'none';
+  }
+}
+
+function saveToLocalStorage() {
+  localStorage.setItem('prevChoices', JSON.stringify(Item.prevChoices));
+  localStorage.setItem('items', JSON.stringify(items));
+}
+
+renderItems(Item.maxImagesDisplayed);
 

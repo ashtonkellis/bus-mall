@@ -6,6 +6,8 @@ body {
   width: 960px;
   margin: auto;
 }
+
+/* HEADER */
 header {
   display: inline-block;
   width: 100%;
@@ -38,17 +40,19 @@ nav ul li {
   border: 1px solid black;
   margin-right: -1px;
   border-radius: 10% 10% 0 0;
+  background-color: #FAD5a6;
+  color: #866768;
 }
 
-/* ITEM SELECTION SECTION */
-.vote h2 {
+/* SUB HEADER */
+h2 {
   text-align: center;
   font-size: 1.5em;
   border: 1px solid black;
   padding: 10px;
-  height: 10%;
 }
 
+/* ITEM SELECTION SECTION */
 .items {
   display: flex;
   justify-content: space-evenly;
@@ -61,48 +65,61 @@ nav ul li {
   border: 1px solid black;
   height: 200px;
   width: 200px;
+  transition: background-color 0.5s ease;
+}
+
+.items img:hover {
+  background-color: #e25f70;
 }
 
 .text {
   padding: 20px 200px;
 }
 
-/* RESULTS TABLE */
-.results-table h2 {
-  font-weight: bold;
-  margin-bottom: 30px;
+/* RESULTS CHART */
+#vote-chart {
+  border: 1px solid black;
+  margin-top: 20px;
+  display: none;
+  height: 100px;
+  width: 100%;
+  height: 500px;
 }
 
+/* RESULTS TABLE */
 table {
   margin: auto;
-}
-
-th {
-  background-color: grey;
-  color: white;
-}
-
-tr:nth-child(odd) {
-  background-color: lightgrey;
 }
 
 th,
 td {
   border: 1px solid black;
   text-align: center;
-  font-size: 12px;
-  line-height: 2;
-  width: 15%;
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: center;
+  padding: 10px;
 }
 
-/* RESULTS CHART */
-#vote-chart {
-  border: 1px solid black;
-  margin-top: 20px;
-  display: block;
+th {
+  background-color: #4c3841;
+  color: #fbb79e;
+}
+
+tr:nth-child(odd) {
+  background-color: #fbb79e;
+  color: #4c3841;
+}
+
+tr:nth-child(even) {
+  background-color: #FAD5a6;
+  color: #866768;
+}
+
+table img {
   height: 100px;
-  width: 100%;
-  height: 500px;
+  width: 100px;
+  padding: 10px;
 }
 
 /* FOOTER */
@@ -111,4 +128,31 @@ footer {
   height: 50px;
   border: 1px solid black;
   padding: 10px;
+  margin-top: 20px;
+}
+
+/* COLOR PALLET */
+.lighttest {
+  background-color: #FAD5a6;
+  color: #866768;
+}
+
+.darkest {
+  background-color: #4c3841;
+  color: #fbb79e;
+}
+
+.light {
+  background-color: #fbb79e;
+  color: #4c3841;
+}
+
+.dark {
+  background-color: #866768;
+  color: #FAD5a6;
+}
+
+.accent {
+  background-color: #e25f70;
+  border: 1px solid #e25f70;
 }
