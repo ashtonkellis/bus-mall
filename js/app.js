@@ -2,7 +2,7 @@
 
 // number of images displayed at a time. recommended < 10 or time to find a unique set of images gets ridiculous...
 Item.maxImagesDisplayed = 3;
-Item.requiredVotes = 5;
+Item.requiredVotes = 25;
 Item.votesThisSession = 0;
 Item.prevChoices = JSON.parse(localStorage.getItem('prevChoices')) || [];
 Item.itemDisplayDiv = document.getElementById('items');

@@ -3,8 +3,6 @@
 # TODAY'S LAB MVP
 
 # STRETCH GOALS
-- custom color pallet
-- style to highlight mouseover of images
 
 # TODAY'S CANVAS ASSIGNMENTS
 - reading (google teams)
