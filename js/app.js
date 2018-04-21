@@ -183,6 +183,7 @@ function handleImageClick (e) {
     addAllImageEventListeners();
   } else {
     // clear previously rendered items, render vote results table, render vote results chart
+    alert('That\'s enough voting for now. Thank you for your contribution. :)');
     clearItems();
     getVoteData();
     renderVoteChart();
