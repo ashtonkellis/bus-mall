@@ -35,10 +35,9 @@ function getVoteData () {
     data.backgroundColor.push(color + ', 0.2)');
     data.borderColor.push(color + ', 1.0)');
     i++;
-
-    Item.data = data;
-    // return data; // CANNOT GET THIS TO WORK! GRR!
   }
+
+  return data;
 }
 
 // load items from local storage if they exist, otherwise create new set of items.
@@ -185,7 +184,7 @@ function handleImageClick (e) {
     // clear previously rendered items, render vote results table, render vote results chart
     alert('That\'s enough voting for now. Thank you for your contribution. :)');
     clearItems();
-    getVoteData();
+    Item.data = getVoteData();
     renderVoteChart();
     renderVotesTable();
     toggleDisplays();
