@@ -242,7 +242,7 @@ function renderVotesTable () {
     trEL.appendChild(addTD(item.name)); // id
     trEL.appendChild(addTD(item.voteNum)); // votes
     trEL.appendChild(addTD(item.shownNum)); // views
-    trEL.appendChild(addTD(Math.floor(100 * item.voteNum / item.shownNum))); // % votes
+    trEL.appendChild(addTD(Math.floor(100 * item.voteNum / item.shownNum) + '%')); // % votes
     tableEL.appendChild(trEL);
   }
 }
